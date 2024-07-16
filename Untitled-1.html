@@ -1,0 +1,217 @@
+
+
+
+weather
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const Lab6 = () => {
+    const [weather, setWeather] = useState(null);
+    const [loading, setLoading] = useState(false); // Initial loading state set to false
+    const [error, setError] = useState(null);
+    const [city, setCity] = useState("Pune"); // Default city
+    const [inputCity, setInputCity] = useState("Pune"); // Input city
+    const apiKey = '61a1d8419f9d307924240958d89e284d';
+
+    const fetchWeather = async (city) => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await axios.get(
+                https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}
+            );
+            setWeather(response.data);
+        } catch (err) {
+            setError(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchWeather(city);
+    }, [city]);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setCity(inputCity);
+    };
+
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    value={inputCity}
+                    onChange={(e) => setInputCity(e.target.value)}
+                    placeholder="Enter city"
+                />
+                <button type="submit">Get Weather</button>
+            </form>
+
+            {loading && <p>Loading weather...</p>}
+            {error && <p>Error fetching weather: {error.message}</p>}
+            {weather && !loading && !error && (
+                <div>
+                    <h2>Weather in {weather.name}</h2>
+                    <p>Temperature: {(weather.main.temp - 273.15).toFixed(2)}°C</p>
+                    <p>Condition: {weather.weather[0].description}</p>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default Lab6;
+
+
+
+
+
+
+
+
+contact us
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>React Contact Us</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone/babel.min.js"></script>
+    <script type="text/babel">
+        class ContactUs extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    name: '',
+                    email: '',
+                    message: ''
+                };
+            }
+
+            handleChange = (event) => {
+                this.setState({ [event.target.name]: event.target.value });
+            }
+
+            handleSubmit = (event) => {
+                event.preventDefault();
+                // Here you would send the email using an email service API
+                alert('Email sent successfully!');
+            }
+
+            render() {
+                return (
+                    <div className="container my-4">
+                        <h2>Contact Us</h2>
+                        <form onSubmit={this.handleSubmit}>
+                            <div className="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" className="form-control" id="name" name="name" value={this.state.name} onChange={this.handleChange} />
+                            </div>
+                            <div className="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" className="form-control" id="email" name="email" value={this.state.email} onChange={this.handleChange} />
+                            </div>
+                            <div className="form-group">
+                                <label for="message">Message:</label>
+                                <textarea className="form-control" id="message" name="message" value={this.state.message} onChange={this.handleChange}></textarea>
+                            </div>
+                            <button type="submit" className="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(<ContactUs />, document.getElementById('root'));
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+login
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>React Login Component</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone/babel.min.js"></script>
+    <script type="text/babel">
+        class Login extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    username: '',
+                    password: '',
+                    loggedIn: false,
+                };
+            }
+
+            handleChange = (event) => {
+                this.setState({ [event.target.name]: event.target.value });
+            }
+
+            handleSubmit = (event) => {
+                event.preventDefault();
+                const { username, password } = this.state;
+                const predefinedUser = {
+                    username: 'admin',
+                    password: 'admin'
+                };
+
+                if (username === predefinedUser.username && password === predefinedUser.password) {
+                    localStorage.setItem('loggedIn', true);
+                    this.setState({ loggedIn: true });
+                    alert('Login successful!');
+                } else {
+                    alert('Invalid credentials.');
+                }
+            }
+
+            render() {
+                if (this.state.loggedIn || localStorage.getItem('loggedIn')) {
+                    return <h2>Welcome, you are logged in!</h2>;
+                }
+                return (
+                    <div className="container my-4">
+                        <h2>Login</h2>
+                        <form onSubmit={this.handleSubmit}>
+                            <div className="form-group">
+                                <label for="username">Username:</label>
+                                <input type="text" className="form-control" id="username" name="username" value={this.state.username} onChange={this.handleChange} />
+                            </div>
+                            <div className="form-group">
+                                <label for="password">Password:</label>
+                                <input type="password" className="form-control" id="password" name="password" value={this.state.password} onChange={this.handleChange} />
+                            </div>
+                            <button type="submit" className="btn btn-primary">Login</button>
+                        </form>
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(<Login />, document.getElementById('root'));
+    </script>
+</body>
+</html>
